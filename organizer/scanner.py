@@ -16,7 +16,8 @@ def scan_directory(directory: str) -> list[Path]:
         raise NotADirectoryError(f"Path is not a directory: {directory}")
 
     files = [
-        item for item in target.iterdir()
+        item
+        for item in target.iterdir()
         if item.is_file() and not item.name.startswith(".")
     ]
 

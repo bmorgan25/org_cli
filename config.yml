@@ -1,0 +1,47 @@
+default_folder: Misc
+folders:
+  Images:
+  - .jpg
+  - .jpeg
+  - .png
+  - .gif
+  - .webp
+  - .svg
+  - .heic
+  Videos:
+  - .mp4
+  - .mov
+  - .avi
+  - .mkv
+  Audio:
+  - .mp3
+  - .wav
+  - .flac
+  Documents:
+  - .pdf
+  - .docx
+  - .doc
+  - .txt
+  - .md
+  - .pptx
+  Finance:
+  - .csv
+  - .xlsx
+  Code:
+  - .py
+  - .js
+  - .ts
+  - .html
+  - .css
+  - .json
+  - .yaml
+  - .yml
+  - .sh
+  Archives:
+  - .zip
+  - .tar
+  - .gz
+  - .rar
+  - .7z
+  Logs:
+  - .log

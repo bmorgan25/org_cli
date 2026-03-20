@@ -4,7 +4,14 @@ import shutil
 from organizer.rules import get_folder_for_extension
 
 
-def organize_files(files: list[Path], destination: str, dry_run: bool = False, verbose: bool = False) -> dict:
+def organize_files(
+    files: list[Path],
+    destination: str,
+    dry_run: bool = False,
+    verbose: bool = False,
+    extension_map: dict = None,
+    default_folder: str = "Misc",
+) -> dict:
     """
     Moves a list of files into subfolders within the destination directory,
     based on their file extensions.
@@ -23,11 +30,12 @@ def organize_files(files: list[Path], destination: str, dry_run: bool = False, v
 
     for file in files:
         extension = file.suffix
-        folder_name = get_folder_for_extension(extension)
+        folder_name = get_folder_for_extension(
+            extension, extension_map=extension_map, default_folder=default_folder
+        )
         target_folder = destination_path / folder_name
         target_path = target_folder / file.name
 
-        # If a file with the same name already exists at the destination, skip it
         if target_path.exists():
             if verbose:
                 print(f"  [SKIPPED] {file.name} already exists in {folder_name}/")
@@ -35,16 +43,16 @@ def organize_files(files: list[Path], destination: str, dry_run: bool = False, v
             continue
 
         if dry_run:
-            print(f"  [DRY RUN] {file.name} -> {folder_name}")
+            print(f"  [DRY RUN] {file.name} -> {folder_name}/")
             summary["moved"].append(file)
             continue
 
-        # Create the subfolder if it doesn't exist
         target_folder.mkdir(parents=True, exist_ok=True)
-
         shutil.move(str(file), str(target_path))
+
         if verbose:
             print(f"  [MOVED] {file.name} -> {folder_name}/")
+
         summary["moved"].append(file)
 
     return summary
