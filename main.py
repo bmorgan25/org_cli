@@ -1,6 +1,7 @@
 from organizer.config import DEFAULT_CONFIG_PATH, load_config, build_extension_map
+from organizer.logger import log_moves
 from organizer.scanner import scan_directory
-from organizer.mover import organize_files
+from organizer.mover import organize_files, undo_last_run
 from organizer.config_commands import config_command
 import click
 
@@ -21,10 +22,15 @@ def cli():
 @click.option(
     "--verbose", "-v", is_flag=True, help="Print detailed output for every file."
 )
-def organize(directory, dry_run, verbose):
+@click.option("--undo", "-u", is_flag=True, help="Reverse the last organization run")
+def organize(directory, dry_run, verbose, undo):
     """
     Organize the files in a given directory into subfolders based on their file extensions.
     """
+
+    if undo:
+        undo_last_run()
+        return
 
     try:
         config = load_config(DEFAULT_CONFIG_PATH)
@@ -59,6 +65,9 @@ def organize(directory, dry_run, verbose):
         extension_map=extension_map,
         default_folder=default_folder,
     )
+
+    if not dry_run and summary["move_records"]:
+        log_moves(summary["move_records"])
 
     click.echo(
         f"\nDone! {len(summary['moved'])} moved, {len(summary['skipped'])} skipped."

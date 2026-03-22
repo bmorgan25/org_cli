@@ -57,7 +57,7 @@ def build_extension_map(config: dict) -> dict:
 
     extensions_map = {}
 
-    for folder, extensions in config.items():
+    for folder, extensions in config["folders"].items():
         for ext in extensions:
             extensions_map[ext.lower()] = folder
 
